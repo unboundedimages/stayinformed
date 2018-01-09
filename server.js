@@ -14,9 +14,13 @@ app.use(logger("dev")); //morgan
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/stayinformed", {
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/stayinformed";
+mongoose.connect(MONGODB_URI, {
    // useMongoClient: true
 });
+// mongoose.connect("mongodb://localhost/stayinformed", {
+// useMongoClient: true
+// });
 
 // Routes
 app.get("/scrape", function(req, res) {
@@ -40,9 +44,9 @@ app.get("/scrape", function(req, res) {
             .then(function(dbArticle) {
                console.log(dbArticle);
             })
-         .catch(function(err) {
-            res.json(err);
-         });
+            .catch(function(err) {
+               res.json(err);
+            });
       });
    });
    res.send("Got it baby ");
