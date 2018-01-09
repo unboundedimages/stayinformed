@@ -27,12 +27,11 @@ app.get("/scrape", function(req, res) {
          // console.log(element);
          var result = {};
 
-         result.headlines = $(this).text()
-         result.url = $(this).attr("href")
-         result.summary = $(this).parent().parent().find("p.wsj-summary ").find("span").text();
-         // result.photos = $(this).parent().parent().parent().find("img.wsj-img-content").attr("src").trim("src")
-         result.photos = $(this).parent().parent().parent().children().children().children().attr("content");
-         // console.log(result.photos);
+         // result.headlines = $(this).text()
+         // result.url = $(this).attr("href")
+         // result.summary = $(this).parent().parent().find("p.wsj-summary ").find("span").text();
+         result.photos = $(this).parent().parent().parent().find("img.wsj-img-content").find("src").trim;
+         console.log(result.photos);
 
 
          db.Article //Creates new articles

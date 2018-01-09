@@ -5,7 +5,7 @@ var ArticleSchema = new Schema({
         type: String,
         require: true
     },
-    Summary: {
+    summary: {
         type: String,
         require: true
     },
@@ -16,5 +16,13 @@ var ArticleSchema = new Schema({
     photos: {
         type: String,
         require: true
+    },
+    note: {
+        type: Schema.Types.ObjectId,
+        ref: "Notes"
     }
-})
+});
+
+var Articles = mongoose.model("Articles", ArticleSchema);
+
+module.exports = Articles;
