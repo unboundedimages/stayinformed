@@ -1,8 +1,23 @@
 <div id="wrapper">
     <h1>Tech in the news</h1>
     <h2><i>Put something clever here.</i></h2>
-    <div id="articles"></div>
-    <div id="notes"></div>
+    <div id="articles">
+        {{#each Articles}}
+        <div>
+            <h3><strong> {{this.headlines}} </strong></h3>
+            <br> {{this.summary}}
+            <br>
+            <a>{{this.url}}</a>
+            <br>
+            <img src="{{this.photos}}">
+            <br>
+        </div>
+        {{/each}}
+    </div>
+    <div id="notes">
+
+
+    </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="app.js"></script>
