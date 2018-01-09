@@ -38,11 +38,11 @@ app.get("/scrape", function(req, res) {
          db.Article //Creates new articles
             .create(result)
             .then(function(dbArticle) {
-               console.log(dbArticle).pretty();
+               console.log(dbArticle);
             })
-            .catch(function(err) {
-               res.json(err);
-            });
+         .catch(function(err) {
+            res.json(err);
+         });
       });
    });
    res.send("Got it baby ");
