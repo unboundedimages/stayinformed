@@ -12,8 +12,8 @@ var app = express();
 //middleware
 app.use(logger("dev")); //morgan
 app.use(bodyParser.urlencoded({ extended: false }));
-app.engine("hbs", exphbs({ defaultLayout: "main" }));
-app.set('view engine', '.hbs');
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set('view engine', '.handlebars');
 app.use(express.static("public"));
 mongoose.Promise = Promise;
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/stayinformed";
@@ -57,7 +57,7 @@ app.get("/scrape", function(req, res) {
 app.get("/", function(req, res) {
    // res.send("I did a get route to here, but point this to the index.hbs when you get it working");
 
-   res.redirect("/index");
+   res.render("index");
 });
 app.get("/articles", function(req, res) {
    db.Article
