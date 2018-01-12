@@ -1,0 +1,63 @@
+<div id="wrapper">
+    <h1>Tech in the news</h1>
+    <h2>
+        <i>
+        <a href = "/scrape"> Put something clever here.</a>
+        </i>
+    </h2>
+    <div id="articles">
+        {{#each Articles}}
+        <div>
+            <h3><strong> {{this.headlines}} </strong></h3>
+            <h5><strong>ID:</strong> <em>{{this._id}}</em></h5>
+            <br>
+            <strong>
+                    copy link: <small>{{this.url}}</small>
+            </strong>
+            <br />
+            <br>
+            <div>
+                <button class="click-me">
+            <br>
+            <a href = "{{this.url}}"> <img src="{{this.photos}}"  height= "150", width= auto></a>
+            <br>
+            <p>
+                <a href="{{this.url}}" class="btn  btn-default" type="submit"  height= "150">Read me</a>
+                <br>
+                 </button>
+            </div>
+            <div>
+                {{this.summary}}
+            </div>
+
+            <br>
+        </div>
+        {{/each}}
+
+    </div>
+
+</div>
+<div class="notes">
+
+</div>
+<script>
+    $(".click-me").click(function() {
+
+
+        // alert("this works");
+        $(".notes").empty(); //empty notes
+        var thisId = $(this).attr("data-id");
+
+        $(".notes").append("<h2>" + "data.headlines" + "</h2>"); // The title of the article
+        // $("#notes").append("<input id='titleinput' name='title' >"); // An inputew title
+        $(".notes").append("<textarea id='bodyinput' name='body'></textarea>"); //textarea
+        // A button to submit a new note, with the id of the article saved to it
+        $(".notes").append("<button data-id='" + "data[i]._id" + "' id='savenote'>Save Note</button>");
+
+        // If there's a note in the article
+        // if (data.note) { // // Place the title of the note in the title input // $("#titleinput").val(data.note.title); // // Place the body of the note in the body textarea // $("#bodyinput").val(data.note.body); // }
+
+
+        // $.ajax({// method: "GET", // url: "/articles/" // }) // .done(function(data) { // console.log(data); // });
+    });
+</script>

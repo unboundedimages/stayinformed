@@ -1,15 +1,42 @@
 <div id="wrapper">
     <h1>Tech in the news</h1>
-    <h2><i>Put something clever here.</i></h2>
+    <h2>
+        <i>
+        <a href = "/scrape"> Put something clever here.</a>
+        </i>
+    </h2>
     <div id="articles">
         {{#each Articles}}
+        <div id="notes" data-id="{{this._id}}">
+
+        </div>
         <div>
             <h3><strong> {{this.headlines}} </strong></h3>
-            <br> {{this.summary}}
+            <h5><strong>ID:</strong> <em>{{this._id}}</em></h5>
             <br>
-            <a>{{this.url}}</a>
+            <strong>
+                    copy link: <small>{{this.url}}</small>
+            </strong>
+            <br />
             <br>
-            <img src="{{this.photos}}">
+            <div>
+                <div>
+                    <br>
+                    <a href="{{this.url}}"> <img src="{{this.photos}}"  height= "150", width= auto></a>
+                    <br>
+                    <p>
+                        <a href="{{this.url}}" class="btn  btn-default" type="submit" height="150">Read me</a>
+                        <br>
+                        <button class="click-me" data-id="{{this._id}}">Text</button>
+
+                    </p>
+                </div>
+            </div>
+            <div>
+                {{this.summary}}
+                <br> {{this.notes}} {{this.note}}
+            </div>
+
             <br>
         </div>
         {{/each}}
@@ -19,5 +46,51 @@
 
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="app.js"></script>
+
+<script>
+    $(".click-me").click(function() {
+
+
+        // alert("this works");
+        $("#notes").empty(); //empty notes
+        var thisId = $(this).attr("data-id");
+
+        $.ajax({
+                method: "GET",
+                url: "/articles/" + thisId
+            })
+            .done(function(data) {
+                // console.log(data);
+                $("#notes").append("<h2>" + data.headlines + "</h2>"); // The title of the article
+                $("#notes").append("<input id='titleinput' name='title' >"); // An inputew title
+                $("#notes").append("<br><textarea id='bodyinput' name='body'></textarea>"); //textarea
+                // A button to submit a new note, with the id of the article saved to it
+                $("#notes").append("<br><button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+                // console.log(data._id)
+                // If there's a note in the article
+                if (data.note) {
+                    // Place the title of the note in the title input
+                    $("#titleinput").val(data.note.title);
+                    // Place the body of the note in the body textarea
+                    $("#bodyinput").val(data.note.body);
+                }
+            });
+    });
+    $(document).on("click", "#savenote", function() {
+        var thisId = $(this).attr("data-id");
+        $.ajax({
+                method: "POST",
+                url: "/articles/" + thisId,
+                data: {
+                    title: $("#titleinput").val(),
+                    body: $("#bodyinput").val()
+                }
+            })
+            .then(function(data) {
+                console.log(data);
+                $("#notes").empty();
+            });
+        $("#titleinput").val("");
+        $("#bodyinput").val("");
+    });
+</script>

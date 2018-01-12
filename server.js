@@ -1,8 +1,8 @@
 var express = require("express");
-var exphbs = require('express-handlebars');
 var bodyParser = require("body-parser");
-var logger = require("morgan");
+var exphbs = require('express-handlebars');
 const mongoose = require("mongoose");
+var logger = require("morgan");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
@@ -36,7 +36,6 @@ app.get("/scrape", function(req, res) {
          result.headlines = $(this).text()
          result.url = $(this).attr("href")
          result.summary = $(this).parent().parent().find("p.wsj-summary ").find("span").text();
-         // result.photos = $(this).parent().parent().parent().find("img.wsj-img-content").attr("src").trim("src")
          result.photos = $(this).parent().parent().parent().children().children().children().attr("content");
          // console.log(result.photos);
 
@@ -47,24 +46,29 @@ app.get("/scrape", function(req, res) {
                console.log(dbArticle);
             })
             .catch(function(err) {
-               res.json(err);
+               return res.json(err);
             });
       });
+      res.send("Got it baby " + `<a href = / >home</a>`);
    });
-   res.send("Got it baby ");
+
 });
 //Get route
 app.get("/", function(req, res) {
    // res.send("I did a get route to here, but point this to the index.hbs when you get it working");
-
-   res.render("index");
+   db.Article
+      .find({})
+      .then(function(dbArticle) {
+         res.render("index", { Articles: dbArticle })
+      })
 });
 app.get("/articles", function(req, res) {
    db.Article
       .find({})
       .then(function(dbArticle) {
-         // res.json(dbArticle);
-         res.render("index", { Articles: dbArticle })
+         res.json({ Articles: dbArticle });
+         // console.log()
+         // res.render("index", { Articles: dbArticle })
       })
       .catch(function(err) {
          res.json(err);
@@ -72,10 +76,12 @@ app.get("/articles", function(req, res) {
 });
 
 app.get("/articles/:id", function(req, res) {
+   // console.log(req.params.id)
    db.Article
       .findOne({ _id: req.params.id })
-      .populate("note")
+      .populate("notes")
       .then(function(dbArticle) {
+         // console.log(dbArticle)
          res.json(dbArticle);
       })
       .catch(function(err) {
@@ -84,12 +90,15 @@ app.get("/articles/:id", function(req, res) {
 });
 
 app.post("/articles/:id", function(req, res) {
+   console.log("Hit route......")
    db.Note
       .create(req.body)
-      .then(function(dbNote) {
-         return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+      .then(function(dbNotes) {
+         console.log("hey buddy -------- n\n---------\n" + dbNotes)
+         return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNotes._id }, { new: true });
       })
       .then(function(dbArticle) {
+         console.log("note saved ------------------------")
          res.json(dbArticle);
       })
       .catch(function(err) {
